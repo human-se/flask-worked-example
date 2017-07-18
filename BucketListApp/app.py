@@ -41,5 +41,21 @@ def signUp():
 def showLogin():
     return render_template('login.html')
 
+@app.route('/login', methods=['POST'])
+def login():
+    _email = request.form['inputEmail']
+    _password = request.form['inputPassword']
+
+    if _email and _password:
+        query = db.session.query(User).filter(User.user_email.in_([_email]))
+        result = query.first()
+
+    if not result:
+    	return json.dumps({'html':'<span>Email not found</span>'})
+    if result.check_password(_password):
+        return json.dumps({'html':'<span>Logged in</span>'})
+    else:
+        return json.dumps({'html':'<span>Password not correct</span>'})
+
 if __name__ == "__main__":
     app.run()
