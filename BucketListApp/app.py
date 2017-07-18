@@ -37,5 +37,9 @@ def signUp():
     else:
         return json.dumps({'html':'<span>Missing fields</span>'})
 
+@app.route('/showLogin')
+def showLogin():
+    return render_template('login.html')
+
 if __name__ == "__main__":
     app.run()
