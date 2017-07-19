@@ -31,6 +31,9 @@
  
       <div class="jumbotron">
         <h1>Bucket List App</h1>
+        {% if error %}
+          <p class=error><strong>Error:</strong> {{ error }}
+        {% endif %}
         <form action="/signUp" method="post" class="form-signin">
         <label for="inputName" class="sr-only">Name</label>
         <input type="name" name="inputName" id="inputName" class="form-control" placeholder="Name" required autofocus>

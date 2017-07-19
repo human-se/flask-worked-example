@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, json, session
+from flask import Flask, render_template, request, json, session, redirect, url_for, flash
 from models import *
 import os
 
@@ -36,14 +36,17 @@ def signUp():
 			try:
 				db.session.commit()
 				session['logged_in'] = True
-				return json.dumps({'html':'<span>User added</span>'})
+				flash('User added')
+				return redirect(url_for('main'))
 			except Exception as e:
 				db.session.rollback()
 				db.session.flush()
-				return json.dumps({'html':'<span>' + e + '</span>'})
-		return json.dumps({'html':'<span>Email not unique</span>'})
+				error = e
+		else:
+			error = 'Email not unique'
 	else:
-		return json.dumps({'html':'<span>Missing fields</span>'})
+		error = 'Missing fields'
+	return render_template('signup.html', error=error)
 
 @app.route('/showLogin')
 def showLogin():
@@ -62,12 +65,16 @@ def login():
 		result = query.first()
 
 	if not result:
-		return json.dumps({'html':'<span>Email not found</span>'})
+		error = 'Email not found'
+		return render_template('login.html', error=error)
+
 	if result.check_password(_password):
 		session['logged_in'] = True
-		return json.dumps({'html':'<span>Logged in</span>'})
+		flash('You were successfully logged in')
+		return redirect(url_for('main'))
 	else:
-		return json.dumps({'html':'<span>Password not correct</span>'})
+		error = 'Password not correct'
+		return render_template('login.html', error=error)
 
 if __name__ == "__main__":
 	app.secret_key = os.urandom(12)
