@@ -76,6 +76,11 @@ def login():
 		error = 'Password not correct'
 		return render_template('login.html', error=error)
 
+@app.route("/logout")
+def logout():
+    session['logged_in'] = False
+    return main()
+
 if __name__ == "__main__":
 	app.secret_key = os.urandom(12)
 	app.run()
