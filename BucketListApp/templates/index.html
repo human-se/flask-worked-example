@@ -18,9 +18,12 @@
         <div class="header">
             <nav>
                 <ul class="nav nav-pills pull-right">
-                  <li role="presentation"><a href="showLogin">Sign In</a></li>
-                  <li role="presentation"><a href="showSignUp">Sign Up</a></li>
-                  <li role="presentation"><a href="logout">Logout</a></li>
+                    {% if not session.logged_in %}
+                        <li role="presentation"><a href="showLogin">Sign In</a></li>
+                        <li role="presentation"><a href="showSignUp">Sign Up</a></li>
+                    {% else %}
+                        <li role="presentation"><a href="logout">Logout</a></li>
+                    {% endif %}
                 </ul>
             </nav>
             <h3 class="text-muted"><a href="/">Python Flask App</a></h3>
